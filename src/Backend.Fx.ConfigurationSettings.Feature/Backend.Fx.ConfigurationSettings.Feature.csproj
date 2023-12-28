@@ -11,4 +11,8 @@
       <ProjectReference Include="..\Backend.Fx.ConfigurationSettings\Backend.Fx.ConfigurationSettings.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Backend.Fx.Execution" Version="1.0.0-pullrequest0001-0007" />
+    </ItemGroup>
+
 </Project>
