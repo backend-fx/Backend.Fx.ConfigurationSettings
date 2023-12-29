@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Backend.Fx.Execution" Version="1.0.0-pullrequest0001-0009" />
+      <PackageReference Include="Backend.Fx.Execution" Version="1.0.0" />
     </ItemGroup>
 
 </Project>
