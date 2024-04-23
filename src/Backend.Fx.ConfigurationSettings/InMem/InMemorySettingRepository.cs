@@ -23,5 +23,10 @@ namespace Backend.Fx.ConfigurationSettings.InMem
             var categorizedValues = SettingsStore.GetOrAdd(category, _ => new Dictionary<string, string?>());
             categorizedValues[key] = serializedValue;
         }
+
+        public bool HasAnySetting(string category)
+        {
+            return SettingsStore.TryGetValue(category, out var categorizedValues) && categorizedValues.Count > 0;
+        }
     }
 }
