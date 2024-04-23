@@ -20,5 +20,12 @@ namespace Backend.Fx.ConfigurationSettings
         /// <param name="key">The key of the setting</param>
         /// <param name="serializedValue">The serialized value of the configuration setting</param>
         void WriteSerializedValue(string category, string key, string? serializedValue);
+
+        /// <summary>
+        /// Checks whether any setting within the given category exists in the persistence layer
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
+        bool HasAnySetting(string category);
     }
 }
