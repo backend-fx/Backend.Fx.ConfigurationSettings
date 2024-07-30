@@ -4,33 +4,32 @@ using Backend.Fx.Execution.DependencyInjection;
 using Backend.Fx.Util;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backend.Fx.ConfigurationSettings.Feature
+namespace Backend.Fx.ConfigurationSettings.Feature;
+
+internal class ConfigurationSettingsModule<TSettingRepository> : IModule 
+    where TSettingRepository : class, ISettingRepository
 {
-    internal class ConfigurationSettingsModule<TSettingRepository> : IModule 
-        where TSettingRepository : class, ISettingRepository
+    private readonly SettingSerializerFactory _settingSerializerFactory;
+    private readonly Assembly[] _assemblies;
+
+    public ConfigurationSettingsModule(SettingSerializerFactory settingSerializerFactory, Assembly[] assemblies)
     {
-        private readonly SettingSerializerFactory _settingSerializerFactory;
-        private readonly Assembly[] _assemblies;
+        _settingSerializerFactory = settingSerializerFactory;
+        _assemblies = assemblies;
+    }
 
-        public ConfigurationSettingsModule(SettingSerializerFactory settingSerializerFactory, Assembly[] assemblies)
+    public void Register(ICompositionRoot compositionRoot)
+    {
+        compositionRoot.Register(
+            ServiceDescriptor.Singleton<ISettingSerializerFactory>(_settingSerializerFactory));
+
+        compositionRoot.Register(
+            ServiceDescriptor.Scoped<ISettingRepository, TSettingRepository>());
+
+        foreach (Type settingsCategoryType in _assemblies.GetImplementingTypes<SettingsCategory>())
         {
-            _settingSerializerFactory = settingSerializerFactory;
-            _assemblies = assemblies;
+            compositionRoot.Register(ServiceDescriptor.Scoped(settingsCategoryType, settingsCategoryType));    
         }
-
-        public void Register(ICompositionRoot compositionRoot)
-        {
-            compositionRoot.Register(
-                ServiceDescriptor.Singleton<ISettingSerializerFactory>(_settingSerializerFactory));
-
-            compositionRoot.Register(
-                ServiceDescriptor.Scoped<ISettingRepository, TSettingRepository>());
-
-            foreach (Type settingsCategoryType in _assemblies.GetImplementingTypes<SettingsCategory>())
-            {
-                compositionRoot.Register(ServiceDescriptor.Scoped(settingsCategoryType, settingsCategoryType));    
-            }
             
-        }
     }
 }

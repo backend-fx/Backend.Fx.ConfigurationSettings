@@ -3,11 +3,10 @@ using JetBrains.Annotations;
 using NodaTime;
 using NodaTime.Text;
 
-namespace Backend.Fx.ConfigurationSettings.Serializers.BCL
+namespace Backend.Fx.ConfigurationSettings.Serializers.BCL;
+
+[UsedImplicitly]
+public class DurationSerializer : NodaTimePatternSerializer<Duration>
 {
-    [UsedImplicitly]
-    public class DurationSerializer : NodaTimePatternSerializer<Duration>
-    {
-        public DurationSerializer() : base(DurationPattern.Roundtrip) { }
-    }
+    public DurationSerializer() : base(DurationPattern.Roundtrip) { }
 }
