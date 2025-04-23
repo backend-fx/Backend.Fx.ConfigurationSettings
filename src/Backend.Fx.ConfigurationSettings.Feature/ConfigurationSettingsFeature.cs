@@ -1,4 +1,5 @@
 using Backend.Fx.Execution;
+using Backend.Fx.Execution.Features;
 using JetBrains.Annotations;
 
 namespace Backend.Fx.ConfigurationSettings.Feature;
@@ -12,7 +13,7 @@ namespace Backend.Fx.ConfigurationSettings.Feature;
 /// <typeparam name="TSettingRepository">The abstraction over your key/value store. Instances of this type will
 /// be injected with a scoped lifetime.</typeparam>
 [PublicAPI]
-public class ConfigurationSettingsFeature<TSettingRepository> : Execution.Features.Feature
+public class ConfigurationSettingsFeature<TSettingRepository> : IFeature
     where TSettingRepository : class, ISettingRepository
 {
     private readonly SettingSerializerFactory _settingSerializerFactory;
@@ -23,7 +24,7 @@ public class ConfigurationSettingsFeature<TSettingRepository> : Execution.Featur
         _settingSerializerFactory = settingSerializerFactory ?? new SettingSerializerFactory();
     }
 
-    public override void Enable(IBackendFxApplication application)
+    public void Enable(IBackendFxApplication application)
     {
         application.CompositionRoot.RegisterModules(
             new ConfigurationSettingsModule<TSettingRepository>(_settingSerializerFactory, application.Assemblies));
