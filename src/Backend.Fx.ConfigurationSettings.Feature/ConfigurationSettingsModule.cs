@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 using Backend.Fx.Execution.DependencyInjection;
 using Backend.Fx.Util;
@@ -10,9 +9,9 @@ internal class ConfigurationSettingsModule<TSettingRepository> : IModule
     where TSettingRepository : class, ISettingRepository
 {
     private readonly SettingSerializerFactory _settingSerializerFactory;
-    private readonly Assembly[] _assemblies;
+    private readonly IEnumerable<Assembly> _assemblies;
 
-    public ConfigurationSettingsModule(SettingSerializerFactory settingSerializerFactory, Assembly[] assemblies)
+    public ConfigurationSettingsModule(SettingSerializerFactory settingSerializerFactory, IEnumerable<Assembly> assemblies)
     {
         _settingSerializerFactory = settingSerializerFactory;
         _assemblies = assemblies;
