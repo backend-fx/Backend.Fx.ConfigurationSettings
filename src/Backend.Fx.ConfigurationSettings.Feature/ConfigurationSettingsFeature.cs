@@ -1,3 +1,4 @@
+using System.Reflection;
 using Backend.Fx.Execution;
 using Backend.Fx.Execution.Features;
 using JetBrains.Annotations;
@@ -29,4 +30,6 @@ public class ConfigurationSettingsFeature<TSettingRepository> : IFeature
         application.CompositionRoot.RegisterModules(
             new ConfigurationSettingsModule<TSettingRepository>(_settingSerializerFactory, application.Assemblies));
     }
+
+    public IEnumerable<Assembly> Assemblies => Array.Empty<Assembly>();
 }
