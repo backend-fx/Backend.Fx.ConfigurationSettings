@@ -5,9 +5,9 @@ using NodaTime.Text;
 namespace Backend.Fx.ConfigurationSettings.Serializers.NodaTime;
 
 [UsedImplicitly]
-public class LocalDateSerializer : NodaTimePatternSerializer<LocalDate>
+public class DurationSerializer : NodaTimePatternSerializer<Duration>
 {
-    public LocalDateSerializer() : base(LocalDatePattern.Iso)
+    public DurationSerializer() : base(DurationPattern.Roundtrip)
     {
     }
 }

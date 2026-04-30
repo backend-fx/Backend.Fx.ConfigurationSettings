@@ -10,7 +10,7 @@ namespace Backend.Fx.ConfigurationSettings;
 /// public int MyIntegerSetting
 /// {
 ///     get => ReadSetting&lt;int?&gt;(nameof(MyIntegerSetting)) ?? 0;
-///     set => WriteSetting&lt;int&gt;>(nameof(MyIntegerSetting), value);
+///     set => WriteSetting&lt;int&gt;(nameof(MyIntegerSetting), value);
 /// }
 /// </code>
 /// </example>
@@ -22,7 +22,8 @@ public abstract class SettingsCategory
     private readonly ISettingRepository _settingRepository;
     private readonly ISettingSerializerFactory _settingSerializerFactory;
 
-    protected SettingsCategory(string category, ISettingRepository settingRepository, ISettingSerializerFactory settingSerializerFactory)
+    protected SettingsCategory(string category, ISettingRepository settingRepository,
+        ISettingSerializerFactory settingSerializerFactory)
     {
         _category = category;
         _settingRepository = settingRepository;

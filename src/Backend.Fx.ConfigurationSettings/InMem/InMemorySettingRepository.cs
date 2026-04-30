@@ -10,7 +10,8 @@ public abstract class InMemorySettingRepository : ISettingRepository
 
     public string? GetSerializedValue(string category, string key)
     {
-        if (SettingsStore.TryGetValue(category, out var categorizedValues) && categorizedValues.TryGetValue(key, out var value))
+        if (SettingsStore.TryGetValue(category, out var categorizedValues) &&
+            categorizedValues.TryGetValue(key, out var value))
         {
             return value;
         }

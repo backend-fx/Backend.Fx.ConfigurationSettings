@@ -13,6 +13,8 @@ public class DateTimeSerializer : ISettingSerializer<DateTime?>
 
     public DateTime? Deserialize(string? value)
     {
-        return string.IsNullOrWhiteSpace(value) ? null : DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+        return string.IsNullOrWhiteSpace(value)
+            ? null
+            : DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
     }
 }
