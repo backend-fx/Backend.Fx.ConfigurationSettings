@@ -24,5 +24,4 @@ public abstract class NodaTimePatternSerializer<T> : ISettingSerializer<T?> wher
             ? null
             : _pattern.Parse(value!).GetValueOrThrow();
     }
-
 }

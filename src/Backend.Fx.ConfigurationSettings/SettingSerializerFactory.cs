@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 
@@ -19,23 +16,34 @@ public class SettingSerializerFactory : ISettingSerializerFactory
     public SettingSerializerFactory()
     {
         Serializers = typeof(ISettingSerializer)
-                      .GetTypeInfo()
-                      .Assembly
-                      .ExportedTypes
-                      .Select(t => t.GetTypeInfo())
-                      .Where(t => !t.IsAbstract && t.IsClass && typeof(ISettingSerializer).GetTypeInfo().IsAssignableFrom(t))
-                      .ToDictionary(
-                          t => t.ImplementedInterfaces
-                                .Single(i => i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(ISettingSerializer<>))
-                                .GenericTypeArguments.Single(),
-                          t => (ISettingSerializer) Activator.CreateInstance(t.AsType()));
+            .GetTypeInfo()
+            .Assembly
+            .ExportedTypes
+            .Select(t => t.GetTypeInfo())
+            .Where(t => !t.IsAbstract && t.IsClass && typeof(ISettingSerializer).GetTypeInfo().IsAssignableFrom(t))
+            .ToDictionary(
+                t => t.ImplementedInterfaces
+                    .Single(i =>
+                        i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(ISettingSerializer<>))
+                    .GenericTypeArguments.Single(),
+                t => (ISettingSerializer)Activator.CreateInstance(t.AsType()));
+
+        // idea: auto register non-nullable serializers
+        // foreach (var kvp in Serializers.ToList())
+        // {
+        //     if (kvp.Key.IsGenericType && typeof(Nullable<>).IsAssignableFrom(kvp.Key.GetGenericTypeDefinition()))
+        //     {
+        //         var nonNullableType = kvp.Key.GetGenericArguments().Single();
+        //         Serializers[nonNullableType] = kvp.Value;
+        //     }
+        // }
     }
 
     public ISettingSerializer<T?> GetSerializer<T>()
     {
         if (Serializers.ContainsKey(typeof(T)))
         {
-            return (ISettingSerializer<T?>) Serializers[typeof(T)];
+            return (ISettingSerializer<T?>)Serializers[typeof(T)];
         }
 
         throw new ArgumentOutOfRangeException(nameof(T),
