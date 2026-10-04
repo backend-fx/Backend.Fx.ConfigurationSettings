@@ -11,10 +11,11 @@ internal class ConfigurationSettingsModule<TSettingRepository> : IModule
     private readonly SettingSerializerFactory _settingSerializerFactory;
     private readonly IEnumerable<Assembly> _assemblies;
 
-    public ConfigurationSettingsModule(SettingSerializerFactory settingSerializerFactory, IEnumerable<Assembly> assemblies)
+    public ConfigurationSettingsModule(IEnumerable<Assembly> assemblies)
     {
-        _settingSerializerFactory = settingSerializerFactory;
-        _assemblies = assemblies;
+        var enumerable = assemblies as Assembly[] ?? assemblies.ToArray();
+        _settingSerializerFactory = new SettingSerializerFactory(enumerable);
+        _assemblies = enumerable;
     }
 
     public void Register(ICompositionRoot compositionRoot)

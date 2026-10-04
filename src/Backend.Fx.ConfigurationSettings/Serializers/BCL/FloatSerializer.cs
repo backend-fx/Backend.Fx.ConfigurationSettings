@@ -8,7 +8,7 @@ public class FloatSerializer : ISettingSerializer<float?>
 {
     public string? Serialize(float? setting)
     {
-        return setting?.ToString("r", CultureInfo.InvariantCulture);
+        return setting?.ToString(CultureInfo.InvariantCulture);
     }
 
     public float? Deserialize(string? value)

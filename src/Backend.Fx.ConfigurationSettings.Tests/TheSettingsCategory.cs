@@ -1,3 +1,4 @@
+using Backend.Fx.ConfigurationSettings.Feature;
 using Backend.Fx.ConfigurationSettings.Tests.Dummy;
 using FakeItEasy;
 using NodaTime;
@@ -49,6 +50,57 @@ public class TheSettingsCategory
 
         A.CallTo(() => _repository.WriteSerializedValue("Dummy", "MyNullableIntegerSetting", null))
             .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public void WritesSerializedNonNullableIntegerToRepository()
+    {
+        _sut.MyIntegerSetting = 42;
+
+        A.CallTo(() => _repository.WriteSerializedValue("Dummy", "MyIntegerSetting", "42"))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public void FactoryResolvesSerializerForNonNullableValueType()
+    {
+        var factory = new SettingSerializerFactory();
+
+        var serializer = factory.GetSerializer<int>();
+
+        Assert.NotNull(serializer);
+        Assert.Equal("5", serializer.Serialize(5));
+        Assert.Equal(5, serializer.Deserialize("5"));
+    }
+
+    [Fact]
+    public void FactoryThrowsForUnknownSettingType()
+    {
+        var factory = new SettingSerializerFactory();
+
+        Assert.Throws<System.ArgumentOutOfRangeException>(() => factory.GetSerializer<System.Text.StringBuilder>());
+    }
+
+    [Fact]
+    public void ConsumerSerializerOverridesBuiltInSerializer()
+    {
+        var factory = new SettingSerializerFactory(new[] { typeof(CustomBooleanSerializer).Assembly });
+
+        var serializer = factory.GetSerializer<bool?>();
+
+        Assert.IsType<CustomBooleanSerializer>(serializer);
+        Assert.Equal("YES", serializer.Serialize(true));
+        Assert.True(serializer.Deserialize("YES"));
+    }
+
+    [Fact]
+    public void BuiltInSerializerIsUsedWhenNoConsumerAssemblyIsScanned()
+    {
+        var factory = new SettingSerializerFactory();
+
+        var serializer = factory.GetSerializer<bool?>();
+
+        Assert.Equal("True", serializer.Serialize(true));
     }
 
     [Fact]
