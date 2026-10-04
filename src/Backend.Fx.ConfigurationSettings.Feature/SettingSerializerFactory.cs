@@ -13,20 +13,67 @@ public class SettingSerializerFactory : ISettingSerializerFactory
 
     public SettingSerializerFactory(IEnumerable<Assembly>? assemblies = null)
     {
-        assemblies = assemblies == null 
-            ? [typeof(ISettingSerializer).Assembly] 
-            : assemblies.Concat([typeof(ISettingSerializer).Assembly]);
+        var builtInAssembly = typeof(ISettingSerializer).Assembly;
 
-        Serializers = assemblies
-            .SelectMany(ass => ass.ExportedTypes)
-            .Select(t => t.GetTypeInfo())
-            .Where(t => !t.IsAbstract && t.IsClass && typeof(ISettingSerializer).GetTypeInfo().IsAssignableFrom(t))
-            .ToDictionary(
-                t => t.ImplementedInterfaces
-                    .Single(i =>
-                        i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(ISettingSerializer<>))
-                    .GenericTypeArguments.Single(),
-                t => (ISettingSerializer)Activator.CreateInstance(t.AsType()));
+        // The built-in serializers (shipped in this library) form the baseline. Serializers found
+        // in the consumer's assemblies may override a built-in for the same setting type
+        // (consumer-wins), but two consumer serializers for the same type are a configuration error.
+        Serializers = new Dictionary<Type, ISettingSerializer>();
+        RegisterSerializers(new[] { builtInAssembly }, allowOverride: false);
+
+        var consumerAssemblies = (assemblies ?? Enumerable.Empty<Assembly>())
+            .Where(a => a != builtInAssembly)
+            .Distinct()
+            .ToArray();
+        RegisterSerializers(consumerAssemblies, allowOverride: true);
+    }
+
+    private void RegisterSerializers(IEnumerable<Assembly> assemblies, bool allowOverride)
+    {
+        var alreadyRegisteredInThisPass = new HashSet<Type>();
+
+        foreach (var typeInfo in assemblies
+                     .SelectMany(a => a.ExportedTypes)
+                     .Select(t => t.GetTypeInfo())
+                     .Where(t => !t.IsAbstract && t.IsClass &&
+                                 typeof(ISettingSerializer).GetTypeInfo().IsAssignableFrom(t)))
+        {
+            var settingType = GetSettingType(typeInfo);
+
+            if (!alreadyRegisteredInThisPass.Add(settingType))
+            {
+                throw new InvalidOperationException(
+                    $"More than one serializer is registered for setting type '{settingType.FullName}'. " +
+                    $"Conflicting serializer: '{typeInfo.FullName}'. Provide a single serializer per setting type.");
+            }
+
+            if (!allowOverride && Serializers.ContainsKey(settingType))
+            {
+                throw new InvalidOperationException(
+                    $"More than one serializer is registered for setting type '{settingType.FullName}'. " +
+                    $"Conflicting serializer: '{typeInfo.FullName}'. Provide a single serializer per setting type.");
+            }
+
+            Serializers[settingType] = (ISettingSerializer)Activator.CreateInstance(typeInfo.AsType());
+        }
+    }
+
+    private static Type GetSettingType(TypeInfo typeInfo)
+    {
+        var settingTypes = typeInfo.ImplementedInterfaces
+            .Where(i => i.GetTypeInfo().IsGenericType &&
+                        i.GetGenericTypeDefinition() == typeof(ISettingSerializer<>))
+            .Select(i => i.GenericTypeArguments.Single())
+            .ToList();
+
+        if (settingTypes.Count != 1)
+        {
+            throw new InvalidOperationException(
+                $"The serializer '{typeInfo.FullName}' must implement exactly one " +
+                $"{typeof(ISettingSerializer<>).Name} interface, but implements {settingTypes.Count}.");
+        }
+
+        return settingTypes[0];
     }
 
     public ISettingSerializer<T?> GetSerializer<T>()

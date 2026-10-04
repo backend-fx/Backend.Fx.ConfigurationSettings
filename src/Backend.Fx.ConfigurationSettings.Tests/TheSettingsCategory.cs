@@ -82,6 +82,28 @@ public class TheSettingsCategory
     }
 
     [Fact]
+    public void ConsumerSerializerOverridesBuiltInSerializer()
+    {
+        var factory = new SettingSerializerFactory(new[] { typeof(CustomBooleanSerializer).Assembly });
+
+        var serializer = factory.GetSerializer<bool?>();
+
+        Assert.IsType<CustomBooleanSerializer>(serializer);
+        Assert.Equal("YES", serializer.Serialize(true));
+        Assert.True(serializer.Deserialize("YES"));
+    }
+
+    [Fact]
+    public void BuiltInSerializerIsUsedWhenNoConsumerAssemblyIsScanned()
+    {
+        var factory = new SettingSerializerFactory();
+
+        var serializer = factory.GetSerializer<bool?>();
+
+        Assert.Equal("True", serializer.Serialize(true));
+    }
+
+    [Fact]
     public void ReadsStringFromRepository()
     {
         A.CallTo(() => _repository.GetSerializedValue("Dummy", "MyStringSetting")).Returns("world");
