@@ -1,3 +1,4 @@
+using Backend.Fx.ConfigurationSettings.Feature;
 using Backend.Fx.ConfigurationSettings.Tests.Dummy;
 using FakeItEasy;
 using NodaTime;

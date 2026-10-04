@@ -17,18 +17,10 @@ namespace Backend.Fx.ConfigurationSettings.Feature;
 public class ConfigurationSettingsFeature<TSettingRepository> : IFeature
     where TSettingRepository : class, ISettingRepository
 {
-    private readonly SettingSerializerFactory _settingSerializerFactory;
-
-    /// <param name="settingSerializerFactory">The factory that provides serializers. A singleton instance is being held.</param>
-    public ConfigurationSettingsFeature(SettingSerializerFactory? settingSerializerFactory = null)
-    {
-        _settingSerializerFactory = settingSerializerFactory ?? new SettingSerializerFactory();
-    }
-
     public void Enable(IBackendFxApplication application)
     {
         application.CompositionRoot.RegisterModules(
-            new ConfigurationSettingsModule<TSettingRepository>(_settingSerializerFactory, application.Assemblies));
+            new ConfigurationSettingsModule<TSettingRepository>(application.Assemblies));
     }
 
     public IEnumerable<Assembly> Assemblies => Array.Empty<Assembly>();

@@ -2,12 +2,7 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using JetBrains.Annotations;
 
-namespace Backend.Fx.ConfigurationSettings;
-
-public interface ISettingSerializerFactory
-{
-    ISettingSerializer<T?> GetSerializer<T>();
-}
+namespace Backend.Fx.ConfigurationSettings.Feature;
 
 [PublicAPI]
 public class SettingSerializerFactory : ISettingSerializerFactory
@@ -16,12 +11,14 @@ public class SettingSerializerFactory : ISettingSerializerFactory
 
     protected Dictionary<Type, ISettingSerializer> Serializers { get; }
 
-    public SettingSerializerFactory()
+    public SettingSerializerFactory(IEnumerable<Assembly>? assemblies = null)
     {
-        Serializers = typeof(ISettingSerializer)
-            .GetTypeInfo()
-            .Assembly
-            .ExportedTypes
+        assemblies = assemblies == null 
+            ? [typeof(ISettingSerializer).Assembly] 
+            : assemblies.Concat([typeof(ISettingSerializer).Assembly]);
+
+        Serializers = assemblies
+            .SelectMany(ass => ass.ExportedTypes)
             .Select(t => t.GetTypeInfo())
             .Where(t => !t.IsAbstract && t.IsClass && typeof(ISettingSerializer).GetTypeInfo().IsAssignableFrom(t))
             .ToDictionary(

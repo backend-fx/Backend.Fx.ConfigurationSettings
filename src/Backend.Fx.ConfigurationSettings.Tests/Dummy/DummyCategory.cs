@@ -1,3 +1,4 @@
+using Backend.Fx.ConfigurationSettings.Feature;
 using NodaTime;
 
 namespace Backend.Fx.ConfigurationSettings.Tests.Dummy;
