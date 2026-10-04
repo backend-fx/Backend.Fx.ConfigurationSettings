@@ -36,7 +36,7 @@ jobs:
           --project src/Backend.Fx.ConfigurationSettings.Tests/Backend.Fx.ConfigurationSettings.Tests.csproj
           --configuration Release
           --results-directory artifacts/test-results
-          --report-trx --report-trx-filename Backend.Fx.Tests.trx
+          --report-trx --report-trx-filename Backend.Fx.Tests.ConfigurationSettings.trx
 
       - name: Test Report
         uses: dorny/test-reporter@v3
