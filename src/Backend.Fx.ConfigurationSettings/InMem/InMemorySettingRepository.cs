@@ -6,7 +6,7 @@ namespace Backend.Fx.ConfigurationSettings.InMem;
 [PublicAPI]
 public abstract class InMemorySettingRepository : ISettingRepository
 {
-    protected abstract ConcurrentDictionary<string, Dictionary<string, string?>> SettingsStore { get; }
+    protected abstract ConcurrentDictionary<string, ConcurrentDictionary<string, string?>> SettingsStore { get; }
 
     public string? GetSerializedValue(string category, string key)
     {
@@ -21,12 +21,12 @@ public abstract class InMemorySettingRepository : ISettingRepository
 
     public void WriteSerializedValue(string category, string key, string? serializedValue)
     {
-        var categorizedValues = SettingsStore.GetOrAdd(category, _ => new Dictionary<string, string?>());
+        var categorizedValues = SettingsStore.GetOrAdd(category, _ => new ConcurrentDictionary<string, string?>());
         categorizedValues[key] = serializedValue;
     }
 
     public bool HasAnySetting(string category)
     {
-        return SettingsStore.TryGetValue(category, out var categorizedValues) && categorizedValues.Count > 0;
+        return SettingsStore.TryGetValue(category, out var categorizedValues) && !categorizedValues.IsEmpty;
     }
 }

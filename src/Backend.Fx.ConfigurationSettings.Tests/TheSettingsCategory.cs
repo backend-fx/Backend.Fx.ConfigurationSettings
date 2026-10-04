@@ -52,6 +52,35 @@ public class TheSettingsCategory
     }
 
     [Fact]
+    public void WritesSerializedNonNullableIntegerToRepository()
+    {
+        _sut.MyIntegerSetting = 42;
+
+        A.CallTo(() => _repository.WriteSerializedValue("Dummy", "MyIntegerSetting", "42"))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public void FactoryResolvesSerializerForNonNullableValueType()
+    {
+        var factory = new SettingSerializerFactory();
+
+        var serializer = factory.GetSerializer<int>();
+
+        Assert.NotNull(serializer);
+        Assert.Equal("5", serializer.Serialize(5));
+        Assert.Equal(5, serializer.Deserialize("5"));
+    }
+
+    [Fact]
+    public void FactoryThrowsForUnknownSettingType()
+    {
+        var factory = new SettingSerializerFactory();
+
+        Assert.Throws<System.ArgumentOutOfRangeException>(() => factory.GetSerializer<System.Text.StringBuilder>());
+    }
+
+    [Fact]
     public void ReadsStringFromRepository()
     {
         A.CallTo(() => _repository.GetSerializedValue("Dummy", "MyStringSetting")).Returns("world");

@@ -8,7 +8,7 @@ public class DoubleSerializer : ISettingSerializer<double?>
 {
     public string? Serialize(double? setting)
     {
-        return setting?.ToString("r", CultureInfo.InvariantCulture);
+        return setting?.ToString(CultureInfo.InvariantCulture);
     }
 
     public double? Deserialize(string? value)
