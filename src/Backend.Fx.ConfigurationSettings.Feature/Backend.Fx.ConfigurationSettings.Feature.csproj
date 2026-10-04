@@ -1,18 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
+        <ImplicitUsings>true</ImplicitUsings>
+        <IncludeSymbols>true</IncludeSymbols>
+        <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
-        <LangVersion>10.0</LangVersion>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Backend.Fx.ConfigurationSettings\Backend.Fx.ConfigurationSettings.csproj" />
+        <ProjectReference Include="..\Backend.Fx.ConfigurationSettings\Backend.Fx.ConfigurationSettings.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Backend.Fx.Execution" Version="1.1.10" />
+        <PackageReference Include="Backend.Fx.Execution" Version="1.1.11"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" PrivateAssets="All"/>
     </ItemGroup>
 
 </Project>
