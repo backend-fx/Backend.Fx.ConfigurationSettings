@@ -13,6 +13,8 @@ public class FloatSerializer : ISettingSerializer<float?>
 
     public float? Deserialize(string? value)
     {
-        return string.IsNullOrWhiteSpace(value) ? null : float.Parse(value, CultureInfo.InvariantCulture);
+        return string.IsNullOrWhiteSpace(value)
+            ? null
+            : float.Parse(value, CultureInfo.InvariantCulture);
     }
 }

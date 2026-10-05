@@ -22,8 +22,11 @@ public abstract class SettingsCategory
     private readonly ISettingRepository _settingRepository;
     private readonly ISettingSerializerFactory _settingSerializerFactory;
 
-    protected SettingsCategory(string category, ISettingRepository settingRepository,
-        ISettingSerializerFactory settingSerializerFactory)
+    protected SettingsCategory(
+        string category,
+        ISettingRepository settingRepository,
+        ISettingSerializerFactory settingSerializerFactory
+    )
     {
         _category = category;
         _settingRepository = settingRepository;

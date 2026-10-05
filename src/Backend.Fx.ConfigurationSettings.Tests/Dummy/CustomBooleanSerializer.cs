@@ -12,7 +12,7 @@ public class CustomBooleanSerializer : ISettingSerializer<bool?>
         {
             null => null,
             true => "YES",
-            false => "NO"
+            false => "NO",
         };
     }
 
@@ -23,7 +23,7 @@ public class CustomBooleanSerializer : ISettingSerializer<bool?>
             null => null,
             "YES" => true,
             "NO" => false,
-            _ => bool.Parse(value)
+            _ => bool.Parse(value),
         };
     }
 }

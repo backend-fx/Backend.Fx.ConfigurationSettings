@@ -4,7 +4,8 @@ using NodaTime.Text;
 namespace Backend.Fx.ConfigurationSettings.Serializers.NodaTime;
 
 [UsedImplicitly]
-public abstract class NodaTimePatternSerializer<T> : ISettingSerializer<T?> where T : struct
+public abstract class NodaTimePatternSerializer<T> : ISettingSerializer<T?>
+    where T : struct
 {
     private readonly IPattern<T> _pattern;
 
@@ -20,8 +21,6 @@ public abstract class NodaTimePatternSerializer<T> : ISettingSerializer<T?> wher
 
     public T? Deserialize(string? value)
     {
-        return string.IsNullOrWhiteSpace(value)
-            ? null
-            : _pattern.Parse(value!).GetValueOrThrow();
+        return string.IsNullOrWhiteSpace(value) ? null : _pattern.Parse(value!).GetValueOrThrow();
     }
 }

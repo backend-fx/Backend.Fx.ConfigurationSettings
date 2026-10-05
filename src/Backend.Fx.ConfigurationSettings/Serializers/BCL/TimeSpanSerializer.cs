@@ -13,6 +13,8 @@ public class TimeSpanSerializer : ISettingSerializer<TimeSpan?>
 
     public TimeSpan? Deserialize(string? value)
     {
-        return string.IsNullOrWhiteSpace(value) ? null : TimeSpan.Parse(value, CultureInfo.InvariantCulture);
+        return string.IsNullOrWhiteSpace(value)
+            ? null
+            : TimeSpan.Parse(value, CultureInfo.InvariantCulture);
     }
 }

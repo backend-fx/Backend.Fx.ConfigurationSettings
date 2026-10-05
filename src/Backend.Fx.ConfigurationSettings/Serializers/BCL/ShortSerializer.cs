@@ -13,6 +13,8 @@ public class ShortSerializer : ISettingSerializer<short?>
 
     public short? Deserialize(string? value)
     {
-        return string.IsNullOrWhiteSpace(value) ? null : short.Parse(value, CultureInfo.InvariantCulture);
+        return string.IsNullOrWhiteSpace(value)
+            ? null
+            : short.Parse(value, CultureInfo.InvariantCulture);
     }
 }

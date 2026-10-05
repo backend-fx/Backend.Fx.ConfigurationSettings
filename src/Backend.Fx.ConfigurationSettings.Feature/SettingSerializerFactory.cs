@@ -32,45 +32,56 @@ public class SettingSerializerFactory : ISettingSerializerFactory
     {
         var alreadyRegisteredInThisPass = new HashSet<Type>();
 
-        foreach (var typeInfo in assemblies
-                     .SelectMany(a => a.ExportedTypes)
-                     .Select(t => t.GetTypeInfo())
-                     .Where(t => !t.IsAbstract && t.IsClass &&
-                                 typeof(ISettingSerializer).GetTypeInfo().IsAssignableFrom(t)))
+        foreach (
+            var typeInfo in assemblies
+                .SelectMany(a => a.ExportedTypes)
+                .Select(t => t.GetTypeInfo())
+                .Where(t =>
+                    !t.IsAbstract
+                    && t.IsClass
+                    && typeof(ISettingSerializer).GetTypeInfo().IsAssignableFrom(t)
+                )
+        )
         {
             var settingType = GetSettingType(typeInfo);
 
             if (!alreadyRegisteredInThisPass.Add(settingType))
             {
                 throw new InvalidOperationException(
-                    $"More than one serializer is registered for setting type '{settingType.FullName}'. " +
-                    $"Conflicting serializer: '{typeInfo.FullName}'. Provide a single serializer per setting type.");
+                    $"More than one serializer is registered for setting type '{settingType.FullName}'. "
+                        + $"Conflicting serializer: '{typeInfo.FullName}'. Provide a single serializer per setting type."
+                );
             }
 
             if (!allowOverride && Serializers.ContainsKey(settingType))
             {
                 throw new InvalidOperationException(
-                    $"More than one serializer is registered for setting type '{settingType.FullName}'. " +
-                    $"Conflicting serializer: '{typeInfo.FullName}'. Provide a single serializer per setting type.");
+                    $"More than one serializer is registered for setting type '{settingType.FullName}'. "
+                        + $"Conflicting serializer: '{typeInfo.FullName}'. Provide a single serializer per setting type."
+                );
             }
 
-            Serializers[settingType] = (ISettingSerializer)Activator.CreateInstance(typeInfo.AsType());
+            Serializers[settingType] = (ISettingSerializer)
+                Activator.CreateInstance(typeInfo.AsType());
         }
     }
 
     private static Type GetSettingType(TypeInfo typeInfo)
     {
-        var settingTypes = typeInfo.ImplementedInterfaces
-            .Where(i => i.GetTypeInfo().IsGenericType &&
-                        i.GetGenericTypeDefinition() == typeof(ISettingSerializer<>))
+        var settingTypes = typeInfo
+            .ImplementedInterfaces.Where(i =>
+                i.GetTypeInfo().IsGenericType
+                && i.GetGenericTypeDefinition() == typeof(ISettingSerializer<>)
+            )
             .Select(i => i.GenericTypeArguments.Single())
             .ToList();
 
         if (settingTypes.Count != 1)
         {
             throw new InvalidOperationException(
-                $"The serializer '{typeInfo.FullName}' must implement exactly one " +
-                $"{typeof(ISettingSerializer<>).Name} interface, but implements {settingTypes.Count}.");
+                $"The serializer '{typeInfo.FullName}' must implement exactly one "
+                    + $"{typeof(ISettingSerializer<>).Name} interface, but implements {settingTypes.Count}."
+            );
         }
 
         return settingTypes[0];
@@ -97,16 +108,22 @@ public class SettingSerializerFactory : ISettingSerializerFactory
                     typeof(T),
                     _ =>
                     {
-                        var adapterType = typeof(NonNullableValueSerializer<>).MakeGenericType(typeof(T));
-                        return (ISettingSerializer)Activator.CreateInstance(adapterType, nullableSerializer)!;
-                    });
+                        var adapterType = typeof(NonNullableValueSerializer<>).MakeGenericType(
+                            typeof(T)
+                        );
+                        return (ISettingSerializer)
+                            Activator.CreateInstance(adapterType, nullableSerializer)!;
+                    }
+                );
 
                 return (ISettingSerializer<T?>)adapter;
             }
         }
 
-        throw new ArgumentOutOfRangeException(nameof(T),
-            $"No Serializer for Setting Type {typeof(T).Name} available");
+        throw new ArgumentOutOfRangeException(
+            nameof(T),
+            $"No Serializer for Setting Type {typeof(T).Name} available"
+        );
     }
 
     private sealed class NonNullableValueSerializer<TValue> : ISettingSerializer<TValue>

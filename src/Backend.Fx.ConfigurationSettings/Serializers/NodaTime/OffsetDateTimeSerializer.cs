@@ -7,7 +7,6 @@ namespace Backend.Fx.ConfigurationSettings.Serializers.NodaTime;
 [UsedImplicitly]
 public class OffsetDateTimeSerializer : NodaTimePatternSerializer<OffsetDateTime>
 {
-    public OffsetDateTimeSerializer() : base(OffsetDateTimePattern.FullRoundtrip)
-    {
-    }
+    public OffsetDateTimeSerializer()
+        : base(OffsetDateTimePattern.FullRoundtrip) { }
 }

@@ -7,7 +7,6 @@ namespace Backend.Fx.ConfigurationSettings.Serializers.NodaTime;
 [UsedImplicitly]
 public class InstantSerializer : NodaTimePatternSerializer<Instant>
 {
-    public InstantSerializer() : base(InstantPattern.ExtendedIso)
-    {
-    }
+    public InstantSerializer()
+        : base(InstantPattern.ExtendedIso) { }
 }

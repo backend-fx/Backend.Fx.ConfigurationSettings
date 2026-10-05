@@ -78,13 +78,17 @@ public class TheSettingsCategory
     {
         var factory = new SettingSerializerFactory();
 
-        Assert.Throws<System.ArgumentOutOfRangeException>(() => factory.GetSerializer<System.Text.StringBuilder>());
+        Assert.Throws<System.ArgumentOutOfRangeException>(() =>
+            factory.GetSerializer<System.Text.StringBuilder>()
+        );
     }
 
     [Fact]
     public void ConsumerSerializerOverridesBuiltInSerializer()
     {
-        var factory = new SettingSerializerFactory(new[] { typeof(CustomBooleanSerializer).Assembly });
+        var factory = new SettingSerializerFactory(
+            new[] { typeof(CustomBooleanSerializer).Assembly }
+        );
 
         var serializer = factory.GetSerializer<bool?>();
 
@@ -138,7 +142,8 @@ public class TheSettingsCategory
     [Fact]
     public void ReadsNullableIntegerFromRepository()
     {
-        A.CallTo(() => _repository.GetSerializedValue("Dummy", "MyNullableIntegerSetting")).Returns("5");
+        A.CallTo(() => _repository.GetSerializedValue("Dummy", "MyNullableIntegerSetting"))
+            .Returns("5");
 
         Assert.Equal(5, _sut.MyNullableIntegerSetting);
     }
@@ -146,7 +151,8 @@ public class TheSettingsCategory
     [Fact]
     public void ReturnsNullForNullableIntegerWhenNotConfigured()
     {
-        A.CallTo(() => _repository.GetSerializedValue("Dummy", "MyNullableIntegerSetting")).Returns(null);
+        A.CallTo(() => _repository.GetSerializedValue("Dummy", "MyNullableIntegerSetting"))
+            .Returns(null);
 
         Assert.Null(_sut.MyNullableIntegerSetting);
     }
@@ -157,7 +163,13 @@ public class TheSettingsCategory
         var instant = Instant.FromUtc(2024, 6, 15, 12, 0, 0);
         _sut.MyNullableInstantSetting = instant;
 
-        A.CallTo(() => _repository.WriteSerializedValue("Dummy", "MyNullableInstantSetting", "2024-06-15T12:00:00Z"))
+        A.CallTo(() =>
+                _repository.WriteSerializedValue(
+                    "Dummy",
+                    "MyNullableInstantSetting",
+                    "2024-06-15T12:00:00Z"
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
 
@@ -173,7 +185,8 @@ public class TheSettingsCategory
     [Fact]
     public void ReadsInstantFromRepository()
     {
-        A.CallTo(() => _repository.GetSerializedValue("Dummy", "MyNullableInstantSetting")).Returns("2024-06-15T12:00:00Z");
+        A.CallTo(() => _repository.GetSerializedValue("Dummy", "MyNullableInstantSetting"))
+            .Returns("2024-06-15T12:00:00Z");
 
         Assert.Equal(Instant.FromUtc(2024, 6, 15, 12, 0, 0), _sut.MyNullableInstantSetting);
     }
@@ -181,7 +194,8 @@ public class TheSettingsCategory
     [Fact]
     public void ReturnsNullInstantWhenNotConfigured()
     {
-        A.CallTo(() => _repository.GetSerializedValue("Dummy", "MyNullableInstantSetting")).Returns(null);
+        A.CallTo(() => _repository.GetSerializedValue("Dummy", "MyNullableInstantSetting"))
+            .Returns(null);
 
         Assert.Null(_sut.MyNullableInstantSetting);
     }
@@ -192,7 +206,9 @@ public class TheSettingsCategory
         var date = new LocalDate(2024, 3, 20);
         _sut.MyLocalDateSetting = date;
 
-        A.CallTo(() => _repository.WriteSerializedValue("Dummy", "MyLocalDateSetting", "2024-03-20"))
+        A.CallTo(() =>
+                _repository.WriteSerializedValue("Dummy", "MyLocalDateSetting", "2024-03-20")
+            )
             .MustHaveHappenedOnceExactly();
     }
 
@@ -201,14 +217,17 @@ public class TheSettingsCategory
     {
         _sut.MyNullableLocalDateSetting = null;
 
-        A.CallTo(() => _repository.WriteSerializedValue("Dummy", "MyNullableLocalDateSetting", null))
+        A.CallTo(() =>
+                _repository.WriteSerializedValue("Dummy", "MyNullableLocalDateSetting", null)
+            )
             .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     public void ReadsLocalDateFromRepository()
     {
-        A.CallTo(() => _repository.GetSerializedValue("Dummy", "MyLocalDateSetting")).Returns("2024-03-20");
+        A.CallTo(() => _repository.GetSerializedValue("Dummy", "MyLocalDateSetting"))
+            .Returns("2024-03-20");
 
         Assert.Equal(new LocalDate(2024, 3, 20), _sut.MyLocalDateSetting);
     }
@@ -216,7 +235,8 @@ public class TheSettingsCategory
     [Fact]
     public void ReturnsNullLocalDateWhenNotConfigured()
     {
-        A.CallTo(() => _repository.GetSerializedValue("Dummy", "MyNullableLocalDateSetting")).Returns(null);
+        A.CallTo(() => _repository.GetSerializedValue("Dummy", "MyNullableLocalDateSetting"))
+            .Returns(null);
 
         Assert.Null(_sut.MyNullableLocalDateSetting);
     }

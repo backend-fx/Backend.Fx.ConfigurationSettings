@@ -1,8 +1,6 @@
 namespace Backend.Fx.ConfigurationSettings;
 
-public interface ISettingSerializer
-{
-}
+public interface ISettingSerializer { }
 
 public interface ISettingSerializer<T> : ISettingSerializer
 {

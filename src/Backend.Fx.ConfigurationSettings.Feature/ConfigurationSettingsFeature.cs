@@ -22,7 +22,8 @@ public class ConfigurationSettingsFeature<TSettingRepository> : IFeature
     public void Enable(IBackendFxApplication application)
     {
         application.CompositionRoot.RegisterModules(
-            new ConfigurationSettingsModule<TSettingRepository>(application.Assemblies));
+            new ConfigurationSettingsModule<TSettingRepository>(application.Assemblies)
+        );
     }
 
     public IEnumerable<Assembly> Assemblies => Array.Empty<Assembly>();

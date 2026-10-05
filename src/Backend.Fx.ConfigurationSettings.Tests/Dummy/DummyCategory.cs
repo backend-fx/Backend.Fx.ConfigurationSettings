@@ -3,8 +3,10 @@ using NodaTime;
 
 namespace Backend.Fx.ConfigurationSettings.Tests.Dummy;
 
-public class DummyCategory(ISettingRepository settingRepository, ISettingSerializerFactory settingSerializerFactory)
-    : SettingsCategory("Dummy", settingRepository, settingSerializerFactory)
+public class DummyCategory(
+    ISettingRepository settingRepository,
+    ISettingSerializerFactory settingSerializerFactory
+) : SettingsCategory("Dummy", settingRepository, settingSerializerFactory)
 {
     public string? MyStringSetting
     {
@@ -35,7 +37,7 @@ public class DummyCategory(ISettingRepository settingRepository, ISettingSeriali
         get => ReadSetting<LocalDate?>(nameof(MyLocalDateSetting)) ?? new LocalDate(2000, 1, 1);
         set => WriteSetting<LocalDate?>(nameof(MyLocalDateSetting), value);
     }
-    
+
     public LocalDate? MyNullableLocalDateSetting
     {
         get => ReadSetting<LocalDate?>(nameof(MyNullableLocalDateSetting));

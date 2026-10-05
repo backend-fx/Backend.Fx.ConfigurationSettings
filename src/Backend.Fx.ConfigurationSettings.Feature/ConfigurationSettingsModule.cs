@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backend.Fx.ConfigurationSettings.Feature;
 
-internal class ConfigurationSettingsModule<TSettingRepository> : IModule 
+internal class ConfigurationSettingsModule<TSettingRepository> : IModule
     where TSettingRepository : class, ISettingRepository
 {
     private readonly SettingSerializerFactory _settingSerializerFactory;
@@ -21,15 +21,18 @@ internal class ConfigurationSettingsModule<TSettingRepository> : IModule
     public void Register(ICompositionRoot compositionRoot)
     {
         compositionRoot.Register(
-            ServiceDescriptor.Singleton<ISettingSerializerFactory>(_settingSerializerFactory));
+            ServiceDescriptor.Singleton<ISettingSerializerFactory>(_settingSerializerFactory)
+        );
 
         compositionRoot.Register(
-            ServiceDescriptor.Scoped<ISettingRepository, TSettingRepository>());
+            ServiceDescriptor.Scoped<ISettingRepository, TSettingRepository>()
+        );
 
         foreach (Type settingsCategoryType in _assemblies.GetImplementingTypes<SettingsCategory>())
         {
-            compositionRoot.Register(ServiceDescriptor.Scoped(settingsCategoryType, settingsCategoryType));    
+            compositionRoot.Register(
+                ServiceDescriptor.Scoped(settingsCategoryType, settingsCategoryType)
+            );
         }
-            
     }
 }
