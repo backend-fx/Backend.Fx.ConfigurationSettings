@@ -13,6 +13,8 @@ public class DecimalSerializer : ISettingSerializer<decimal?>
 
     public decimal? Deserialize(string? value)
     {
-        return string.IsNullOrWhiteSpace(value) ? null : decimal.Parse(value, CultureInfo.InvariantCulture);
+        return string.IsNullOrWhiteSpace(value)
+            ? null
+            : decimal.Parse(value, CultureInfo.InvariantCulture);
     }
 }

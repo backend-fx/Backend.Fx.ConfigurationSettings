@@ -13,6 +13,8 @@ public class LongSerializer : ISettingSerializer<long?>
 
     public long? Deserialize(string? value)
     {
-        return string.IsNullOrWhiteSpace(value) ? null : long.Parse(value, CultureInfo.InvariantCulture);
+        return string.IsNullOrWhiteSpace(value)
+            ? null
+            : long.Parse(value, CultureInfo.InvariantCulture);
     }
 }

@@ -7,7 +7,6 @@ namespace Backend.Fx.ConfigurationSettings.Serializers.NodaTime;
 [UsedImplicitly]
 public class DurationSerializer : NodaTimePatternSerializer<Duration>
 {
-    public DurationSerializer() : base(DurationPattern.Roundtrip)
-    {
-    }
+    public DurationSerializer()
+        : base(DurationPattern.Roundtrip) { }
 }

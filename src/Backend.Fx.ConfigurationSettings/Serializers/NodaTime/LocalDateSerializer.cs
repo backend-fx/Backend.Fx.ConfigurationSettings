@@ -7,7 +7,6 @@ namespace Backend.Fx.ConfigurationSettings.Serializers.NodaTime;
 [UsedImplicitly]
 public class LocalDateSerializer : NodaTimePatternSerializer<LocalDate>
 {
-    public LocalDateSerializer() : base(LocalDatePattern.Iso)
-    {
-    }
+    public LocalDateSerializer()
+        : base(LocalDatePattern.Iso) { }
 }

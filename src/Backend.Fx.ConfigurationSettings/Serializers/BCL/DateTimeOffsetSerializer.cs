@@ -15,6 +15,10 @@ public class DateTimeOffsetSerializer : ISettingSerializer<DateTimeOffset?>
     {
         return string.IsNullOrWhiteSpace(value)
             ? null
-            : DateTimeOffset.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+            : DateTimeOffset.Parse(
+                value,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.RoundtripKind
+            );
     }
 }

@@ -7,7 +7,6 @@ namespace Backend.Fx.ConfigurationSettings.Serializers.NodaTime;
 [UsedImplicitly]
 public class AnnualDateSerializer : NodaTimePatternSerializer<AnnualDate>
 {
-    public AnnualDateSerializer() : base(AnnualDatePattern.Iso)
-    {
-    }
+    public AnnualDateSerializer()
+        : base(AnnualDatePattern.Iso) { }
 }

@@ -13,6 +13,8 @@ public class DoubleSerializer : ISettingSerializer<double?>
 
     public double? Deserialize(string? value)
     {
-        return string.IsNullOrWhiteSpace(value) ? null : double.Parse(value, CultureInfo.InvariantCulture);
+        return string.IsNullOrWhiteSpace(value)
+            ? null
+            : double.Parse(value, CultureInfo.InvariantCulture);
     }
 }

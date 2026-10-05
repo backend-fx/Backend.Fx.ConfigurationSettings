@@ -13,6 +13,8 @@ public class IntegerSerializer : ISettingSerializer<int?>
 
     public int? Deserialize(string? value)
     {
-        return string.IsNullOrWhiteSpace(value) ? null : int.Parse(value, CultureInfo.InvariantCulture);
+        return string.IsNullOrWhiteSpace(value)
+            ? null
+            : int.Parse(value, CultureInfo.InvariantCulture);
     }
 }
