@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="src/Backend.Fx.ConfigurationSettings.Feature/Backend.Fx.ConfigurationSettings.Feature.csproj" />
+  <Project Path="src/Backend.Fx.ConfigurationSettings.Tests/Backend.Fx.ConfigurationSettings.Tests.csproj" />
+  <Project Path="src/Backend.Fx.ConfigurationSettings/Backend.Fx.ConfigurationSettings.csproj" />
+</Solution>
